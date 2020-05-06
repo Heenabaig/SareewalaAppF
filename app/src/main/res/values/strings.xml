@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">SareewalaAppF</string>
+    <string name="s_pref_file" />
+    <string name="s_pref_login_status" />
+    <string name="s_pref_email" />
+    <string name="s_pref_date" />
+</resources>
