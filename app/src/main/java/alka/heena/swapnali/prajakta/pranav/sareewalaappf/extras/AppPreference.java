@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.widget.Toast;
 
-import alka.heena.swapnali.prajakta.pranav.sareewalaappf.MainActivity;
+
 import alka.heena.swapnali.prajakta.pranav.sareewalaappf.R;
 
 public class AppPreference {
