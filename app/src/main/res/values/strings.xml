@@ -4,4 +4,18 @@
     <string name="s_pref_login_status" />
     <string name="s_pref_email" />
     <string name="s_pref_date" />
+    <string name="title_activity_bottom_nav">BottomNavActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_category">Category</string>
+    <string name="title_search">Search</string>
+    <string name="title_basket">Basket</string>
+    <string name="drawerOpen" />
+    <string name="drawerClose" />
+    <string name="this_is_the_title" />
+    <string name="slide_viewer" />
+    <string name="_0_items" />
+    <string name="back_button" />
+
+
+
 </resources>

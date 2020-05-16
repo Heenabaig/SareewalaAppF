@@ -4,46 +4,46 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".MainActivity"
+    android:layout_margin="5dp"
+    android:layout_marginTop="10dp"
     android:background="@drawable/saree_image"
-     android:layout_marginTop="10dp"
-    android:padding="20dp" android:layout_margin="5dp"
-    >
+    android:orientation="vertical"
+    android:padding="20dp"
+    tools:context=".MainActivity">
+
     <ImageView
-        android:layout_marginTop="50dp"
-        android:layout_height="128dp"
-        android:layout_width="wrap_content"
-        android:src="@drawable/logo"
-        android:layout_marginBottom="150dp"
         android:id="@+id/imageView"
-        tools:ignore="MissingConstraints" />
+        android:layout_width="wrap_content"
+        android:layout_height="128dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="150dp"
+        android:src="@drawable/logo"
+         />
+
     <Button
+        android:id="@+id/btn_SIGNUP"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
         android:background="@drawable/abc"
         android:padding="6dp"
-        android:layout_margin="10dp"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:id="@+id/btn_SIGNUP"
-        android:textColor="@android:color/white"
-        android:textAppearance="?android:textAppearanceMedium"
-        android:textStyle="bold"
         android:text="SIGN UP"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
         tools:ignore="MissingConstraints" />
 
     <Button
+        android:id="@+id/btn_LOGIN"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:background="@drawable/bcd"
         android:padding="6dp"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:id="@+id/btn_LOGIN"
-        android:textColor="@android:color/holo_red_dark"
-        android:textAppearance="?android:textAppearanceMedium"
-        android:textStyle="bold"
         android:text="LOGIN"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:textColor="@android:color/holo_red_dark"
+        android:textStyle="bold"
         tools:ignore="MissingConstraints" />
-
-
 
 
 </LinearLayout>
