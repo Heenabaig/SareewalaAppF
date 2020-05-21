@@ -41,8 +41,9 @@ public class CategoryFragment extends Fragment {
     private RecyclerView.LayoutManager mLayoutManager;
     private RecyclerView.Adapter mAdapter;
 
-    TextView textView,productcount;
     private CategoryViewModel mViewModel;
+    TextView textView,productcount;
+
 
     SliderLayout sliderLayout;
 
@@ -87,7 +88,6 @@ public class CategoryFragment extends Fragment {
             @Override
             public void onResponse(Call<Product_Pojo> call, Response<Product_Pojo> response) {
                 List<Product> products = response.body().getProduct();
-
                 arrayList = new ArrayList<>();
 
                 for(int i=0 ; i<products.size() ; i++){
@@ -101,12 +101,13 @@ public class CategoryFragment extends Fragment {
 
                     HashMap<String, String> map = new HashMap<>();
 
-                    // map.put("productid", productid);
-                    // map.put("categoryid", categoryid);
+                    map.put("productid", productid);
+                    map.put("categoryid", categoryid);
                     map.put("discountedprice",discountedprice);
                     map.put("originalprice",originalprice);
                     map.put("sareename",sareename);
                     map.put("url", imgUrl);
+                    map.put("quantity","1");
 
                     arrayList.add(map);
 
@@ -116,6 +117,7 @@ public class CategoryFragment extends Fragment {
 
                 mAdapter = new ProductAdapter(getActivity(), arrayList);
                 mRecyclerview.setAdapter(mAdapter);
+                savecart();
             }
 
             @Override
@@ -127,6 +129,10 @@ public class CategoryFragment extends Fragment {
             }
         });
     return root;
+    }
+
+    private void savecart() {
+
     }
 
     private void setSliderViews() {
@@ -159,6 +165,13 @@ public class CategoryFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(CategoryViewModel.class);
         // TODO: Use the ViewModel
+    }
+
+    public Fragment MyFragment() {
+        Fragment fragment;
+        fragment = CategoryFragment.this;
+
+        return fragment;
     }
 
 }

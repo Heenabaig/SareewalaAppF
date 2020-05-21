@@ -39,12 +39,9 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(LoginActivity.this, BottomNavActivity.class);
-startActivity(intent);
-                Toast.makeText(LoginActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
-
-            }
-
+                    Intent intent = new Intent(LoginActivity.this, BottomNavActivity.class);
+                    startActivity(intent);
+                }
         });
 
     }

@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="#fff"
     tools:context=".ui.offers.OffersFragment">
 
     <LinearLayout
@@ -11,7 +12,6 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:background="@color/red"
-        android:layout_marginTop="50dp"
         >
 
 

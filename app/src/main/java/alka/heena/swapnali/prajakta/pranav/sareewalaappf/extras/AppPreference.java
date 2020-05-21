@@ -51,4 +51,9 @@ public class AppPreference {
         Toast.makeText(context, message, Toast.LENGTH_LONG).show();
     }
 
+    public String getDisplayName() {
+        return sharedPreferences.getString(String.valueOf(R.string.name), "Heena");
+    }
+
+
 }

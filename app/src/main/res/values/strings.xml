@@ -16,6 +16,16 @@
     <string name="_0_items" />
     <string name="back_button" />
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="cart" />
+    <string name="saree_cart_image" />
+    <string name="mrp" />
+    <string name="remove_from_cart" />
+    <string name="remove" />
+    <string name="_1" />
+    <string name="name" />
+    <string name="Heena" />
 
 
 </resources>

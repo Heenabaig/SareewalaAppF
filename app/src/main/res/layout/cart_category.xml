@@ -20,10 +20,11 @@
             android:layout_height="match_parent" >
 
             <ImageView
-                android:id="@+id/sareeimage"
+                android:id="@+id/sareecartimage"
                 android:layout_width="100dp"
                 android:layout_height="match_parent"
                 android:adjustViewBounds="true"
+                android:contentDescription="@string/saree_cart_image"
                 app:srcCompat="@android:drawable/ic_menu_report_image" />
         </androidx.cardview.widget.CardView>
 
@@ -34,7 +35,7 @@
 
             <TextView
                 android:paddingTop="10dp"
-                android:id="@+id/sareetitle"
+                android:id="@+id/sareecarttitle"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:maxLines="2"
@@ -48,15 +49,14 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="MRP: Rs"
-                    android:textSize="12sp"
-                   >
+                    android:text="@string/mrp"
+                    android:textSize="12sp">
 
                 </TextView>
 
                 <TextView
                     android:paddingTop="10dp"
-                    android:id="@+id/sareeprice"
+                    android:id="@+id/sareecartprice"
                     android:layout_width="80dp"
                     android:layout_height="wrap_content"
                     android:maxLines="2"
@@ -66,7 +66,7 @@
             </LinearLayout>
 
             <TextView
-                android:id="@+id/sareediscountprice"
+                android:id="@+id/sareediscountcartprice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:maxLines="2"
@@ -82,32 +82,64 @@
             android:orientation="vertical"
             android:layout_marginStart="100dp">
 
-            <Button
-                android:id="@+id/wishlist"
-                android:layout_width="100dp"
-                android:layout_height="30dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="10dp"
-                android:background="@drawable/cate"
-                android:maxLines="2"
-                android:text="To wishlist"
-                android:textColor="#fff"
-                android:textSize="12sp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@color/red">
 
-            <Button
-                android:id="@+id/cart"
-                android:layout_width="100dp"
-                android:layout_height="30dp"
-                android:background="@drawable/crt"
-                android:gravity="center_horizontal"
-                android:maxLines="2"
-                android:paddingTop="10dp"
-                android:text="Add to cart"
-                android:textAlignment="center"
-                android:textColor="#fff"
-                android:textSize="12sp"
-                android:enabled="true"/>
+                <ImageView
+                    android:id="@+id/imageView2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    app:srcCompat="@drawable/ic_remove_circle"
+                    tools:ignore="VectorDrawableCompat"
+                    android:contentDescription="@string/remove_from_cart"/>
 
+                <Button
+                    android:id="@+id/removec"
+                    android:layout_width="60dp"
+                    android:layout_height="30dp"
+                    android:background="@color/red"
+                    android:text="@string/remove"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    android:layout_marginEnd="10dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/addp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/ic_add_product"
+                    />
+
+                <TextView
+                    android:id="@+id/quantityp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/_1"
+                    android:textColor="@color/red"
+                    android:textAlignment="center"
+                    android:textSize="19sp"/>
+
+                <Button
+                    android:id="@+id/removep"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/ic_remove_product"
+                    />
+
+            </LinearLayout>
 
 
         </LinearLayout>
