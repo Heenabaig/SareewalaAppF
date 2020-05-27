@@ -2,9 +2,9 @@
 
     <LinearLayout
     android:orientation="vertical"
-    android:background="@drawable/saree_image"
+    android:background="@drawable/saree2"
     android:padding="10dp"
-    tools:context=".RegistrationActivity"
+    tools:context=".activities.RegistrationActivity"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
@@ -43,7 +43,7 @@
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:id="@+id/name"
-        android:textColor="@android:color/black"
+        android:textColor="@android:color/white"
         android:textColorHint="@android:color/white"
         android:inputType="textPersonName"
         android:hint="Enter Full Name"
@@ -62,7 +62,7 @@
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:id="@+id/email_reg"
-        android:textColor="@android:color/black"
+        android:textColor="@android:color/white"
         android:textColorHint="@android:color/white"
         android:inputType="textEmailAddress"
         android:hint="demo123@gmail.com"
@@ -81,7 +81,7 @@
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:id="@+id/password_reg"
-        android:textColor="@android:color/black"
+        android:textColor="@android:color/white"
         android:textColorHint="@android:color/white"
         android:inputType="textPassword"
         android:hint="Enter your password"
@@ -93,17 +93,17 @@
         android:gravity="left"
         android:textAppearance="?android:textAppearanceLarge"
         android:textColor="@android:color/holo_red_dark"
-        android:text="Retype Password"/>
+        android:text="Confirm Password"/>
 
     <EditText
         android:padding="10dp"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:id="@+id/repassword_reg"
-        android:textColor="@android:color/black"
+        android:textColor="@android:color/white"
         android:textColorHint="@android:color/white"
         android:inputType="textPassword"
-        android:hint="Retype password"
+        android:hint="Confirm your password"
         android:layout_margin="10dp"/>
 
     <TextView
@@ -118,7 +118,7 @@
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:id="@+id/phone_reg"
-        android:textColor="@android:color/black"
+        android:textColor="@android:color/white"
         android:textColorHint="@android:color/white"
         android:inputType="number"
         android:hint="Enter your phone number"

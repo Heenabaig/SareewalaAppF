@@ -18,6 +18,14 @@ public class AppPreference {
         editor = sharedPreferences.edit();
     }
 
+    //setting usr id
+    public void setUserId(String id){
+        editor.putString(String.valueOf(R.string.userid) , id);
+        editor.commit();
+    }
+    public String getUserId(){
+        return sharedPreferences.getString(String.valueOf(R.string.userid),null);
+    }
     //Setting login status
     public void setLoginStatus(boolean status){
         editor.putBoolean(String.valueOf(R.string.s_pref_login_status), status);
@@ -51,9 +59,23 @@ public class AppPreference {
         Toast.makeText(context, message, Toast.LENGTH_LONG).show();
     }
 
-    public String getDisplayName() {
-        return sharedPreferences.getString(String.valueOf(R.string.name), "Heena");
+    public void setDisplayName(String name){
+        editor.putString(String.valueOf(R.string.name), name);
+        editor.commit();
     }
 
+    public String getDisplayName() {
+        return sharedPreferences.getString(String.valueOf(R.string.name), "Name");
+    }
 
+    public void setPhoneNO(String phoneNO){
+        editor.putString(String.valueOf(R.string.phoneno), phoneNO);
+        editor.commit();
+    }
+    public String getPhoneNO(){
+        return sharedPreferences.getString(String.valueOf(R.string.phoneno), null);
+    }
+
+    public void setProductId(String productid) {
+    }
 }

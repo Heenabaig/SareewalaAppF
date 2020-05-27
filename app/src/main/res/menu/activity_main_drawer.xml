@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:showIn="navigation_view">
+    tools:showIn="navigation_view"
+    >
 
     <group android:checkableBehavior="single">
         <item
@@ -21,18 +22,19 @@
             android:title="My Cart" />
 
         <item
-            android:id="@+id/orderFragment"
+            android:id="@+id/navigation_orders"
             android:title="My Orders"/>
 
         <item
+            android:id="@+id/navigation_notification"
             android:title="Notification"/>
 
         <item
-            android:id="@+id/customerserviceFragment"
+            android:id="@+id/navigation_customerserv"
             android:title="Customer Service"/>
 
         <item
-            android:id="@+id/faqsFragment"
+            android:id="@+id/navigation_faqs"
             android:title="FAQ's"/>
 
     </group>

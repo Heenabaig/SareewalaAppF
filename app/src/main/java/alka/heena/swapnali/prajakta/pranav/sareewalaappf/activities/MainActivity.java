@@ -1,4 +1,4 @@
-package alka.heena.swapnali.prajakta.pranav.sareewalaappf;
+package alka.heena.swapnali.prajakta.pranav.sareewalaappf.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import alka.heena.swapnali.prajakta.pranav.sareewalaappf.R;
 import alka.heena.swapnali.prajakta.pranav.sareewalaappf.extras.AppPreference;
 
 public class MainActivity extends AppCompatActivity {
@@ -21,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
         btnLogin = findViewById(R.id.btn_LOGIN);
         btnSignUp = findViewById(R.id.btn_SIGNUP);
         appPreference = new AppPreference(this);
+
 
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override

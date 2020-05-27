@@ -5,4 +5,5 @@
     <item name="navigation_category" type="id" />
     <item name="navigation_search" type="id" />
     <item name="navigation_offer" type="id" />
+    <item name="exception" type="id" />
 </resources>

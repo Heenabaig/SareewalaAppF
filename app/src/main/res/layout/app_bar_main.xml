@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".BottomNavActivity">
-
+    tools:context=".activities.BottomNavActivity">
 
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="66dp"
+        android:background="@color/white"
         android:theme="@style/AppTheme.AppBarOverLay">
 
     <androidx.appcompat.widget.Toolbar
@@ -21,18 +21,19 @@
         app:layout_anchor="@+id/appBarLayout"
         app:layout_anchorGravity="center">
 
-    <SearchView
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:visibility="visible"
-        android:background="@drawable/blackborder"
-        >
+        <SearchView
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:background="@drawable/blackborder"
+            android:visibility="visible">
 
-    </SearchView>
+        </SearchView>
 
-    </androidx.appcompat.widget.Toolbar >
+    </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
-
     <include layout="@layout/content_main" />
+
+
+
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -26,6 +26,12 @@
     <string name="_1" />
     <string name="name" />
     <string name="Heena" />
+    <string name="hello_order_fragment" />
+    <string name="hello_faq_fragment" />
+    <string name="s_pref_id" />
+    <string name="s_pref_name" />
+    <string name="phoneno" />
+    <string name="userid" />
 
 
 </resources>

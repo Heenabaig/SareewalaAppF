@@ -23,20 +23,31 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
+import alka.heena.swapnali.prajakta.pranav.sareewalaappf.Api;
 import alka.heena.swapnali.prajakta.pranav.sareewalaappf.R;
+import alka.heena.swapnali.prajakta.pranav.sareewalaappf.extras.AppPreference;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
-import static alka.heena.swapnali.prajakta.pranav.sareewalaappf.BottomNavActivity.ta;
-import static alka.heena.swapnali.prajakta.pranav.sareewalaappf.BottomNavActivity.tda;
+import static alka.heena.swapnali.prajakta.pranav.sareewalaappf.activities.BottomNavActivity.ta;
+import static alka.heena.swapnali.prajakta.pranav.sareewalaappf.activities.BottomNavActivity.tda;
 
 public class BasketFragment extends Fragment {
     private RecyclerView mRecyclerview;
     private RecyclerView.LayoutManager mLayoutManager;
     private RecyclerView.Adapter mAdapter;
+    public static ArrayList<HashMap<String, String>> array;
 
     private BasketViewModel mViewModel;
-    TextView totalrs,totaldisrs;
+    TextView totalrs,totaldisrs,exception;
     public static ArrayList<HashMap<String, String>> cartlist;
+    public static AppPreference appPreference;
+
 
     public static BasketFragment newInstance() {
         return new BasketFragment();
@@ -47,41 +58,74 @@ public class BasketFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         final View root = inflater.inflate(R.layout.basket_fragment, container, false);
         mRecyclerview = root.findViewById(R.id.basket_recycler);
-        mLayoutManager = new LinearLayoutManager(root.getContext());
-        mRecyclerview.setLayoutManager(mLayoutManager);
 
+
+        appPreference = new AppPreference(getActivity());
 
         totalrs = (TextView) root.findViewById(R.id.totalrs);
         totaldisrs = (TextView) root.findViewById(R.id.totaldisrs);
 
-        loadcart();
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(Api.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
 
-        if (cartlist != null){
+        Api service = retrofit.create(Api.class);
+        Call<CartPojo> call = service.fetchcart(Integer.parseInt(appPreference.getUserId()));
+        call.enqueue(new Callback<CartPojo>() {
+            @Override
+            public void onResponse(Call<CartPojo> call, Response<CartPojo> response) {
+                if (response.body().getResponse().equals("already_added")) {
+                    List<Cart> cart = response.body().getCart();
+                    array = new ArrayList<>();
 
+                    for (int i = 0; i < cart.size(); i++) {
 
+                        String imgUrl = cart.get(i).getProductPath();
+                        String productid = cart.get(i).getProductId();
+                        String name = cart.get(i).getProductName();
+                        String cartid = cart.get(i).getId();
+                        String quantity = cart.get(i).getQuantity();
+                        String orgprice = cart.get(i).getOriginalPrice();
+                        String disprice = cart.get(i).getDiscountedPrice();
 
-            mAdapter = new BasketAdapter(getActivity(),getFragmentManager(),this);
-            mRecyclerview.setAdapter(mAdapter);
+                        HashMap<String, String> map = new HashMap<>();
+                        map.put("url", imgUrl);
+                        map.put("name", name);
+                        map.put("productid", productid);
+                        map.put("cartid", cartid);
+                        map.put("quantity", quantity);
+                        map.put("orgprice", orgprice);
+                        map.put("disprice", disprice);
 
-            totalrs.setText(String.format("Total : Rs %s", tda));
-            totaldisrs.setText(String.format("Saved Rs %s", Integer.parseInt(ta) - Integer.parseInt(tda) ));
+                        array.add(map);
 
+                        List<String> total = response.body().getTotal();
+                        String org = total.get(0);
+                        String dis = total.get(1);
+                        totalrs.setText(String.format("Total : Rs %s", dis));
+                        totaldisrs.setText(String.format("Saved Rs %s", String.valueOf(Integer.parseInt(org) - Integer.parseInt(dis))));
+                    }
+                    if ( cart.size() > 0) {
+                        mLayoutManager = new LinearLayoutManager(root.getContext());
+                        mRecyclerview.setLayoutManager(mLayoutManager);
+                        mAdapter = new BasketAdapter(getActivity(), getFragmentManager(), BasketFragment.this, array);
+                        mRecyclerview.setAdapter(mAdapter);
+                    }
 
-        }
-return root;
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CartPojo> call, Throwable t) {
+
+            }
+        });
+
+        return root;
     }
 
-    private void loadcart() {
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("cart", Context.MODE_PRIVATE);
-        Gson gson = new Gson();
-        String json = sharedPreferences.getString("cart_value",null);
-        Type type = new TypeToken<ArrayList<HashMap<String,String>>>(){}.getType();
-        cartlist = gson.fromJson(json,type);
 
-        SharedPreferences sp = getActivity().getSharedPreferences("carttotal", Context.MODE_PRIVATE);
-        ta = sp.getString("totalamt",null);
-        tda = sp.getString("totaldisamt",null);
-    }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {

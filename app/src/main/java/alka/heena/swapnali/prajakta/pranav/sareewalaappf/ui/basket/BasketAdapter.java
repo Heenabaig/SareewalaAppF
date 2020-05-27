@@ -12,32 +12,41 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
+import alka.heena.swapnali.prajakta.pranav.sareewalaappf.Api;
 import alka.heena.swapnali.prajakta.pranav.sareewalaappf.R;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
-import static alka.heena.swapnali.prajakta.pranav.sareewalaappf.BottomNavActivity.cartarrayList;
-import static alka.heena.swapnali.prajakta.pranav.sareewalaappf.BottomNavActivity.ta;
-import static alka.heena.swapnali.prajakta.pranav.sareewalaappf.BottomNavActivity.tda;
-import static alka.heena.swapnali.prajakta.pranav.sareewalaappf.BottomNavActivity.totalamt;
-import static alka.heena.swapnali.prajakta.pranav.sareewalaappf.BottomNavActivity.totaldisamt;
+import static alka.heena.swapnali.prajakta.pranav.sareewalaappf.activities.BottomNavActivity.cartarrayList;
+import static alka.heena.swapnali.prajakta.pranav.sareewalaappf.activities.BottomNavActivity.ta;
+import static alka.heena.swapnali.prajakta.pranav.sareewalaappf.activities.BottomNavActivity.tda;
+import static alka.heena.swapnali.prajakta.pranav.sareewalaappf.activities.BottomNavActivity.totalamt;
+import static alka.heena.swapnali.prajakta.pranav.sareewalaappf.activities.BottomNavActivity.totaldisamt;
 import static alka.heena.swapnali.prajakta.pranav.sareewalaappf.ui.basket.BasketFragment.cartlist;
 
 public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder> {
     Context mContext;
     FragmentManager fragmentManager;
     Fragment f;
-    public BasketAdapter(Context cxt, FragmentManager targetFragment, Fragment fragment) {
+    ArrayList<HashMap<String, String>> mArray;
+
+    public BasketAdapter(Context cxt, FragmentManager targetFragment, Fragment fragment, ArrayList<HashMap<String, String>> array) {
         this.mContext = cxt;
         this.fragmentManager = targetFragment;
         this.f = fragment;
+        this.mArray = array;
 
     }
     public  static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
@@ -71,32 +80,45 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
 
+        final HashMap<String,String> map = mArray.get(position);
 
-        final HashMap<String,String> map = cartlist.get(position);
-        if (cartlist.contains(cartarrayList)){
-            cartlist.indexOf(map.get("productid"));
-            Toast.makeText(mContext,"Alreasy Exists",Toast.LENGTH_SHORT).show();
-        }else {
+        Glide.with(mContext).load(map.get("url")).into(holder.imgBanner);
+        holder.sareename.setText(map.get("name"));
+        holder.sareecartprice.setText(map.get("orgprice"));
+        holder.sareecartprice.setPaintFlags(holder.sareecartprice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        holder.discountedprice.setText(map.get("disprice"));
+        holder.quantity.setText(map.get("quantity"));
 
-            Glide.with(mContext).load(map.get("url")).into(holder.imgBanner);
-            holder.sareename.setText(map.get("sareename"));
-            holder.sareecartprice.setText(map.get("originalprice"));
-            holder.sareecartprice.setPaintFlags(holder.sareecartprice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-            holder.discountedprice.setText(map.get("discountedprice"));
-            holder.quantity.setText(map.get("quantity"));
-        }
+
+
 
         holder.remove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                cartlist.remove(position);
-                applycart();
-                ta = String.valueOf(Integer.parseInt(ta) - (Integer.parseInt(map.get("originalprice")) * Integer.parseInt(map.get("quantity"))));
-                tda = String.valueOf(Integer.parseInt(tda) - (Integer.parseInt(map.get("discountedprice")) * Integer.parseInt(map.get("quantity"))));
-                totalamt = ta;
-                totaldisamt = tda;
-                applycarttotal();
 
+
+                Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl(Api.BASE_URL)
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
+
+                Api service = retrofit.create(Api.class);
+                Call<Remove> call = service.removeCart(Integer.parseInt(map.get("cartid")));
+                call.enqueue(new Callback<Remove>() {
+                    @Override
+                    public void onResponse(Call<Remove> call, Response<Remove> response) {
+                        if (response.body().getResponse().equals("removed")){
+                            Toast.makeText(mContext,"Removed Successfully",Toast.LENGTH_SHORT).show();
+                        }else if (response.body().getResponse().equals("error")){
+                            Toast.makeText(mContext,"Try Again Later",Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Remove> call, Throwable t) {
+
+                    }
+                });
 
                 fragmentManager.beginTransaction().detach(f).attach(f).commit();
             }
@@ -105,17 +127,24 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder
         holder.add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                map.put("quantity",String.valueOf(Integer.parseInt(map.get("quantity")) + Integer.parseInt("1")));
-                holder.quantity.setText(map.get("quantity"));
-                applycart();
+                Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl(Api.BASE_URL)
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
+                Api service = retrofit.create(Api.class);
+                Call<CartPojo> call = service.updatecart(Integer.parseInt(map.get("cartid")),Integer.parseInt(map.get("quantity"))+1);
+                call.enqueue(new Callback<CartPojo>() {
+                    @Override
+                    public void onResponse(Call<CartPojo> call, Response<CartPojo> response) {
 
-                ta = String.valueOf(Integer.parseInt(ta) + Integer.parseInt(map.get("originalprice")));
-                tda = String.valueOf(Integer.parseInt(tda) + Integer.parseInt(map.get("discountedprice")));
+                    }
 
-                applycarttotal();
+                    @Override
+                    public void onFailure(Call<CartPojo> call, Throwable t) {
 
-                //Toast toast = Toast.makeText(mContext,map.get("quantity"),Toast.LENGTH_SHORT);
-                //toast.show();
+                    }
+                });
+
 
                 fragmentManager.beginTransaction().detach(f).attach(f).commit();
             }
@@ -124,48 +153,36 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder
         holder.rem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (Integer.parseInt(map.get("quantity")) > 1) {
-                    map.put("quantity", String.valueOf(Integer.parseInt(map.get("quantity")) - Integer.parseInt("1")));
-                    holder.quantity.setText(map.get("quantity"));
-                    applycart();
-                    ta = String.valueOf(Integer.parseInt(ta) - Integer.parseInt(map.get("originalprice")));
-                    tda = String.valueOf(Integer.parseInt(tda) - Integer.parseInt(map.get("discountedprice")));
+                Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl(Api.BASE_URL)
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
+                Api service = retrofit.create(Api.class);
+                if (Integer.parseInt(map.get("quantity"))>1) {
+                    Call<CartPojo> call = service.updatecart(Integer.parseInt(map.get("cartid")), Integer.parseInt(map.get("quantity")) - 1);
+                    call.enqueue(new Callback<CartPojo>() {
+                        @Override
+                        public void onResponse(Call<CartPojo> call, Response<CartPojo> response) {
 
-                    applycarttotal();
+                        }
 
+                        @Override
+                        public void onFailure(Call<CartPojo> call, Throwable t) {
 
-                    fragmentManager.beginTransaction().detach(f).attach(f).commit();
+                        }
+                    });
+                }else{
+                    Toast.makeText(mContext,"Quantity Cannot be 0",Toast.LENGTH_SHORT).show();
                 }
-                else
-                {
-                    Toast t = Toast.makeText(mContext,"Quantity Cannot be 0",Toast.LENGTH_SHORT);
-                    t.show();
-                }
+                fragmentManager.beginTransaction().detach(f).attach(f).commit();
             }
         });
-    }
-
-    private void applycarttotal() {
-        SharedPreferences sp = mContext.getSharedPreferences("carttotal", Context.MODE_PRIVATE);
-        SharedPreferences.Editor ed = sp.edit();
-        ed.putString("totaldisamt",tda);
-        ed.putString("totalamt",ta);
-        ed.apply();
-    }
-
-    private void applycart() {
-        SharedPreferences sharedPreferences = mContext.getSharedPreferences("cart", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        Gson gson = new Gson();
-        String json = gson.toJson(cartlist);
-        editor.putString("cart_value",json);
-        editor.apply();
     }
 
     @Override
     public int getItemCount()
     {
-        return cartlist.size();
+        return mArray.size();
     }
 
     @Override

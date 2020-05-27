@@ -1,8 +1,6 @@
 package alka.heena.swapnali.prajakta.pranav.sareewalaappf.ui.category;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,29 +10,28 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import alka.heena.swapnali.prajakta.pranav.sareewalaappf.Preference;
+import alka.heena.swapnali.prajakta.pranav.sareewalaappf.Api;
 import alka.heena.swapnali.prajakta.pranav.sareewalaappf.R;
-
-import static alka.heena.swapnali.prajakta.pranav.sareewalaappf.BottomNavActivity.cartarrayList;
-import static alka.heena.swapnali.prajakta.pranav.sareewalaappf.BottomNavActivity.totalamt;
-import static alka.heena.swapnali.prajakta.pranav.sareewalaappf.BottomNavActivity.totaldisamt;
+import alka.heena.swapnali.prajakta.pranav.sareewalaappf.extras.AppPreference;
+import alka.heena.swapnali.prajakta.pranav.sareewalaappf.ui.basket.CartPojo;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHolder> {
 
     Context mContext;
     ArrayList<HashMap<String, String>> mArray;
-
+    public static AppPreference appPreference;
 
 
 
@@ -62,6 +59,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             sareediscount = (TextView) v.findViewById(R.id.sareediscountprice);
             cart = (Button) v.findViewById(R.id.cart);
 
+
         }
 
         @Override
@@ -74,6 +72,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         final HashMap<String,String> map = mArray.get(position);
 
+        appPreference = new AppPreference(mContext);
 
         holder.sareetitle.setText(map.get("sareename"));
         holder.sareeprice.setText(map.get("originalprice"));
@@ -86,62 +85,30 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             @Override
             public void onClick(View v) {
 
+                Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl(Api.BASE_URL)
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
 
-                SharedPreferences s = mContext.getSharedPreferences("cart", Context.MODE_PRIVATE);
-                Gson g = new Gson();
-                String j = s.getString("cart_value",null);
-                Type t = new TypeToken<ArrayList<HashMap<String,String>>>(){}.getType();
-                cartarrayList = g.fromJson(j,t);
+                Api service = retrofit.create(Api.class);
+                Call<CartPojo> call = service.CheckCart(Integer.parseInt(appPreference.getUserId()),Integer.parseInt(map.get("productid")));
+                call.enqueue(new Callback<CartPojo>() {
+                    @Override
+                    public void onResponse(Call<CartPojo> call, Response<CartPojo> response) {
+                        if (response.body().getResponse().equals("added")){
+                            appPreference.setProductId(map.get("productid"));
+                            Toast.makeText(mContext,"Added to Cart Sucessfully",Toast.LENGTH_SHORT).show();
+                        }
+                        else if (response.body().getResponse().equals("already_added")){
+                            Toast.makeText(mContext,"Already Added to Cart",Toast.LENGTH_SHORT).show();
+                        }
+                    }
 
-                if (cartarrayList==null) {
-                    cartarrayList = new ArrayList<>();
-                }
-                HashMap<String, String> cartmap = new HashMap<>();
+                    @Override
+                    public void onFailure(Call<CartPojo> call, Throwable t) {
 
-                cartmap.put("productid", map.get("productid"));
-                cartmap.put("discountedprice", map.get("discountedprice"));
-                cartmap.put("originalprice", map.get("originalprice"));
-                cartmap.put("sareename", map.get("sareename"));
-                cartmap.put("url", map.get("url"));
-                cartmap.put("quantity", map.get("quantity"));
-
-                cartarrayList.add(cartmap);
-
-
-
-                SharedPreferences sp = mContext.getSharedPreferences("carttotal", Context.MODE_PRIVATE);
-                SharedPreferences.Editor ed = sp.edit();
-                ed.putString("disamt", map.get("discountedprice"));
-                ed.putString("totamt", map.get("originalprice"));
-                ed.apply();
-                totalamt = sp.getString("totalamt", null);
-                totaldisamt = sp.getString("totaldisamt", null);
-                if (totalamt==null && totaldisamt==null){
-                    totaldisamt="0";
-                    totalamt="0";
-                }
-                ed.putString("totalamt", String.valueOf(Integer.parseInt(totalamt) + Integer.parseInt(sp.getString("totamt", null))));
-                ed.putString("totaldisamt", String.valueOf(Integer.parseInt(totaldisamt) + Integer.parseInt(sp.getString("disamt", null))));
-                ed.apply();
-
-
-                SharedPreferences sharedPreferences = mContext.getSharedPreferences("cart", Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                Gson gson = new Gson();
-                String json = gson.toJson(cartarrayList);
-                editor.putString("cart_value", json);
-                editor.apply();
-
-
-                holder.cart.setEnabled(false);
-                holder.cart.setBackgroundColor(Color.parseColor("#88B7B8AE"));
-
-                Preference.jump = 1;
-
-                Toast toast1 = Toast.makeText(mContext,
-                        "Added to Cart Sucessfully",
-                        Toast.LENGTH_SHORT);
-                toast1.show();
+                    }
+                });
 
 
             }

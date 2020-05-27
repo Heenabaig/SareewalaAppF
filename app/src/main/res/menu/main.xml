@@ -6,12 +6,17 @@
         android:orderInCategory="100"
         android:title="notification"
         android:icon="@drawable/notify"
-        app:showAsAction="always"/>
+        app:showAsAction="always"
 
+
+        />
     <item
         android:id="@+id/action_profile"
         android:orderInCategory="100"
         android:title="profile"
         android:icon="@drawable/profile"
-        app:showAsAction="always" />
+        app:showAsAction="always"
+
+
+        />
 </menu>

@@ -1,6 +1,5 @@
-package alka.heena.swapnali.prajakta.pranav.sareewalaappf;
+package alka.heena.swapnali.prajakta.pranav.sareewalaappf.activities;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -10,6 +9,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import alka.heena.swapnali.prajakta.pranav.sareewalaappf.R;
 import alka.heena.swapnali.prajakta.pranav.sareewalaappf.constants.Constant;
 import alka.heena.swapnali.prajakta.pranav.sareewalaappf.model.User;
 import alka.heena.swapnali.prajakta.pranav.sareewalaappf.services.RetrofitClient;
@@ -89,6 +89,7 @@ public class RegistrationActivity extends AppCompatActivity {
                                 phone.setText("");
                                 pass.setText("");
                                 MainActivity.appPreference.showToast("Registered Successfully");
+
                             } else if (response.body().getResponse().equals("exists")){
                                 MainActivity.appPreference.showToast("This email already exists");
                             } else if (response.body().getResponse().equals("error")){
